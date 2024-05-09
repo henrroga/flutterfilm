@@ -17,20 +17,7 @@ class _CarouselLoadingWidgetState extends State<CarouselLoadingWidget>
     with TickerProviderStateMixin {
   late CarouselLoadingModel _model;
 
-  final animationsMap = {
-    'containerOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        ShimmerEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          color: const Color(0xB37F8388),
-          angle: 0.524,
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -42,6 +29,21 @@ class _CarouselLoadingWidgetState extends State<CarouselLoadingWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => CarouselLoadingModel());
+
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ShimmerEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            color: const Color(0xB37F8388),
+            angle: 0.524,
+          ),
+        ],
+      ),
+    });
   }
 
   @override

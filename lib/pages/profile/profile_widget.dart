@@ -47,6 +47,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   fontFamily: 'Outfit',
                   color: Colors.white,
                   fontSize: 22.0,
+                  letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
@@ -93,8 +94,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 children: [
                                   Text(
                                     'name',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -103,8 +108,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 children: [
                                   Text(
                                     'username',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -120,7 +129,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             children: [
                               Text(
                                 'Favorites',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0.0,
+                                    ),
                               ),
                             ],
                           ),
@@ -144,6 +158,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Outfit',
                             fontSize: 16.0,
+                            letterSpacing: 0.0,
                             fontWeight: FontWeight.w500,
                           ),
                     ),

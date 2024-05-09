@@ -57,6 +57,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     fontFamily: 'Outfit',
                     color: Colors.white,
                     fontSize: 22.0,
+                    letterSpacing: 0.0,
                   ),
             ),
             actions: const [],
@@ -83,9 +84,17 @@ class _SearchWidgetState extends State<SearchWidget> {
                     autofocus: true,
                     obscureText: false,
                     decoration: InputDecoration(
-                      labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                      labelStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                fontFamily: 'Readex Pro',
+                                letterSpacing: 0.0,
+                              ),
                       hintText: 'Search for movies...',
-                      hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                      hintStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                fontFamily: 'Readex Pro',
+                                letterSpacing: 0.0,
+                              ),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: FlutterFlowTheme.of(context).alternate,
@@ -121,6 +130,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Readex Pro',
                           color: FlutterFlowTheme.of(context).info,
+                          letterSpacing: 0.0,
                         ),
                     validator:
                         _model.textControllerValidator.asValidator(context),
@@ -147,7 +157,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                             _model.input,
                             'any',
                           ),
-                          tmdbKey: FFAppConstants.tmdbKey,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -240,6 +249,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
                                         fontSize: 22.0,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),

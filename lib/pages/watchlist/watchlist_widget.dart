@@ -55,6 +55,7 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
                   fontFamily: 'Outfit',
                   color: Colors.white,
                   fontSize: 22.0,
+                  letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
@@ -87,7 +88,6 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
                         return FutureBuilder<ApiCallResponse>(
                           future: MovieDetailsCall.call(
                             movieId: idItem,
-                            tmdbKey: FFAppConstants.tmdbKey,
                           ),
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.

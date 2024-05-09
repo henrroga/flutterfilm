@@ -51,6 +51,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   fontFamily: 'Outfit',
                   color: Colors.white,
                   fontSize: 22.0,
+                  letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
@@ -82,6 +83,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryText,
                                   fontSize: 16.0,
+                                  letterSpacing: 0.0,
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
@@ -192,6 +194,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 fontFamily: 'Readex Pro',
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
@@ -312,6 +315,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 fontFamily: 'Readex Pro',
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
@@ -420,6 +424,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 fontFamily: 'Readex Pro',
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),

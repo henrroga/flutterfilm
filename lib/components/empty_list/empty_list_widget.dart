@@ -50,6 +50,7 @@ class _EmptyListWidgetState extends State<EmptyListWidget> {
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
                         fontSize: 28.0,
+                        letterSpacing: 0.0,
                         fontWeight: FontWeight.w300,
                       ),
                 ),

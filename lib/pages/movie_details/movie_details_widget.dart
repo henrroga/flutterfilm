@@ -32,7 +32,8 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
     super.initState();
     _model = createModel(context, () => MovieDetailsModel());
 
-    _model.expandableController = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController =
+        ExpandableController(initialExpanded: false);
   }
 
   @override
@@ -142,6 +143,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                 fontFamily: 'Readex Pro',
                                 color: FlutterFlowTheme.of(context).lightCyan,
                                 fontSize: 16.0,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
@@ -164,6 +166,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                 fontFamily: 'Readex Pro',
                                 color: FlutterFlowTheme.of(context).lightCyan,
                                 fontSize: 16.0,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
@@ -196,6 +199,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                 fontFamily: 'Outfit',
                                 color: Colors.white,
                                 fontSize: 22.0,
+                                letterSpacing: 0.0,
                               ),
                     ),
                     background: ClipRRect(
@@ -249,7 +253,11 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                               .jsonBody,
                                         )?.toString()} mins',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              letterSpacing: 0.0,
+                                            ),
                                       ),
                                     ].divide(const SizedBox(width: 2.0)),
                                   ),
@@ -345,7 +353,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                             width: double.infinity,
                             color: const Color(0x00000000),
                             child: ExpandableNotifier(
-                              controller: _model.expandableController,
+                              controller: _model.expandableExpandableController,
                               child: ExpandablePanel(
                                 header: Text(
                                   valueOrDefault<String>(
@@ -361,6 +369,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
                                         fontSize: 16.0,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.normal,
                                       ),
                                 ),
@@ -387,7 +396,12 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                               ),
                                               style:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
                                             ),
                                           ),
                                         ],
@@ -405,6 +419,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .secondary,
+                                                letterSpacing: 0.0,
                                               ),
                                         ),
                                       ],
@@ -427,7 +442,11 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                             '[overview]',
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                letterSpacing: 0.0,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -482,6 +501,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
                                             fontSize: 16.0,
+                                            letterSpacing: 0.0,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -547,21 +567,22 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                     ),
                                                   ),
                                                 ),
-                                                Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    AutoSizeText(
-                                                      getJsonField(
-                                                        castItem,
-                                                        r'''$.name''',
-                                                      ).toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      maxLines: 2,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Expanded(
+                                                        child: AutoSizeText(
+                                                          getJsonField(
+                                                            castItem,
+                                                            r'''$.name''',
+                                                          ).toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 2,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
                                                               .bodyMedium
                                                               .override(
                                                                 fontFamily:
@@ -570,25 +591,29 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                                         context)
                                                                     .primaryText,
                                                                 fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
                                                               ),
-                                                      minFontSize: 12.0,
-                                                    ),
-                                                    AutoSizeText(
-                                                      getJsonField(
-                                                        castItem,
-                                                        r'''$.character''',
-                                                      )
-                                                          .toString()
-                                                          .maybeHandleOverflow(
-                                                            maxChars: 100,
-                                                            replacement: '…',
-                                                          ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      maxLines: 1,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                          minFontSize: 12.0,
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: AutoSizeText(
+                                                          getJsonField(
+                                                            castItem,
+                                                            r'''$.character''',
+                                                          )
+                                                              .toString()
+                                                              .maybeHandleOverflow(
+                                                                maxChars: 100,
+                                                                replacement:
+                                                                    '…',
+                                                              ),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
                                                               .bodyMedium
                                                               .override(
                                                                 fontFamily:
@@ -597,10 +622,14 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                                         context)
                                                                     .secondaryText,
                                                                 fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
                                                               ),
-                                                      minFontSize: 12.0,
-                                                    ),
-                                                  ],
+                                                          minFontSize: 12.0,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ].divide(const SizedBox(height: 4.0)),
                                             ),
@@ -625,6 +654,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
                                             fontSize: 16.0,
+                                            letterSpacing: 0.0,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -715,6 +745,8 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                                         context)
                                                                     .primaryText,
                                                                 fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
                                                               ),
                                                       minFontSize: 12.0,
                                                     ),
@@ -742,6 +774,8 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                                         context)
                                                                     .secondaryText,
                                                                 fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
                                                               ),
                                                       minFontSize: 12.0,
                                                     ),

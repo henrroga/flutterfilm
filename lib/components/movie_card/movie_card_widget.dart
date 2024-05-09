@@ -106,6 +106,7 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                                     .override(
                                       fontFamily: 'Readex Pro',
                                       fontSize: 17.0,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                     ),
                               ),
@@ -127,6 +128,7 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                     fontSize: 12.0,
+                                    letterSpacing: 0.0,
                                   ),
                             ),
                           ],

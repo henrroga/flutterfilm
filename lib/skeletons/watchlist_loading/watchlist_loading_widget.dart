@@ -17,20 +17,7 @@ class _WatchlistLoadingWidgetState extends State<WatchlistLoadingWidget>
     with TickerProviderStateMixin {
   late WatchlistLoadingModel _model;
 
-  final animationsMap = {
-    'containerOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        ShimmerEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          color: const Color(0xB27F8388),
-          angle: 0.524,
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -42,6 +29,21 @@ class _WatchlistLoadingWidgetState extends State<WatchlistLoadingWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => WatchlistLoadingModel());
+
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ShimmerEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            color: const Color(0xB27F8388),
+            angle: 0.524,
+          ),
+        ],
+      ),
+    });
   }
 
   @override
