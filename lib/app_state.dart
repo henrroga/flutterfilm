@@ -36,17 +36,17 @@ class FFAppState extends ChangeNotifier {
   }
 
   void addToWatchlist(String value) {
-    _watchlist.add(value);
+    watchlist.add(value);
     prefs.setStringList('ff_watchlist', _watchlist);
   }
 
   void removeFromWatchlist(String value) {
-    _watchlist.remove(value);
+    watchlist.remove(value);
     prefs.setStringList('ff_watchlist', _watchlist);
   }
 
   void removeAtIndexFromWatchlist(int index) {
-    _watchlist.removeAt(index);
+    watchlist.removeAt(index);
     prefs.setStringList('ff_watchlist', _watchlist);
   }
 
@@ -54,12 +54,12 @@ class FFAppState extends ChangeNotifier {
     int index,
     String Function(String) updateFn,
   ) {
-    _watchlist[index] = updateFn(_watchlist[index]);
+    watchlist[index] = updateFn(_watchlist[index]);
     prefs.setStringList('ff_watchlist', _watchlist);
   }
 
   void insertAtIndexInWatchlist(int index, String value) {
-    _watchlist.insert(index, value);
+    watchlist.insert(index, value);
     prefs.setStringList('ff_watchlist', _watchlist);
   }
 }

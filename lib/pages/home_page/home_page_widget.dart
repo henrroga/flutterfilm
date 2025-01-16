@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/skeletons/carousel_loading/carousel_loading_widget.dart';
@@ -36,27 +37,28 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'FlutterFilm',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondary,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
           centerTitle: false,
-          elevation: 2.0,
+          elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
@@ -68,28 +70,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'Featuring',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  fontSize: 16.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
                     FutureBuilder<ApiCallResponse>(
                       future: PopularCall.call(
                         tmdbKey: FFAppConstants.tmdbKey,
@@ -100,17 +80,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           return const CarouselLoadingWidget();
                         }
                         final carouselPopularResponse = snapshot.data!;
+
                         return Builder(
                           builder: (context) {
-                            final popularPoster = (PopularCall.results(
-                                      carouselPopularResponse.jsonBody,
-                                    )?.toList() ??
+                            final popularPoster = (HomeFeedStruct.maybeFromMap(
+                                            carouselPopularResponse.jsonBody)
+                                        ?.results
+                                        .toList() ??
                                     [])
                                 .take(5)
                                 .toList();
+
                             return SizedBox(
                               width: double.infinity,
-                              height: 180.0,
+                              height: 200.0,
                               child: CarouselSlider.builder(
                                 itemCount: popularPoster.length,
                                 itemBuilder: (context, popularPosterIndex, _) {
@@ -126,9 +109,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         'MovieDetails',
                                         queryParameters: {
                                           'movieID': serializeParam(
-                                            PopularCall.movieID(
-                                              carouselPopularResponse.jsonBody,
-                                            )?[popularPosterIndex],
+                                            popularPosterItem.id,
                                             ParamType.int,
                                           ),
                                         }.withoutNulls,
@@ -138,20 +119,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.network(
                                         valueOrDefault<String>(
-                                          getJsonField(
-                                                    popularPosterItem,
-                                                    r'''$.backdrop_path''',
-                                                  ) !=
-                                                  null
-                                              ? 'https://image.tmdb.org/t/p/original${getJsonField(
-                                                  popularPosterItem,
-                                                  r'''$.backdrop_path''',
-                                                ).toString()}'
-                                              : 'https://media.comicbook.com/files/img/default-movie.png',
-                                          'https://media.comicbook.com/files/img/default-movie.png',
+                                          'https://image.tmdb.org/t/p/original${popularPosterItem.backdropPath}',
+                                          'https://picsum.photos/seed/243/600',
                                         ),
-                                        width: 300.0,
-                                        height: 200.0,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -159,10 +129,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 },
                                 carouselController:
                                     _model.carouselController ??=
-                                        CarouselController(),
+                                        CarouselSliderController(),
                                 options: CarouselOptions(
-                                  initialPage: min(1, popularPoster.length - 1),
-                                  viewportFraction: 0.9,
+                                  initialPage:
+                                      max(0, min(1, popularPoster.length - 1)),
+                                  viewportFraction: 0.95,
                                   disableCenter: true,
                                   enlargeCenterPage: true,
                                   enlargeFactor: 0.25,
@@ -186,19 +157,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Now Playing',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Readex Pro',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Now Playing',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Outfit',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
                         ),
-                      ].addToStart(const SizedBox(width: 16.0)),
+                      ],
                     ),
                     FutureBuilder<ApiCallResponse>(
                       future: NowPlayingCall.call(
@@ -210,12 +185,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           return const PostersLoadingWidget();
                         }
                         final rowNowPlayingResponse = snapshot.data!;
+
                         return Builder(
                           builder: (context) {
-                            final nowPlayingMovie = NowPlayingCall.results(
-                                  rowNowPlayingResponse.jsonBody,
-                                )?.toList() ??
+                            final nowPlayingMovie = HomeFeedStruct.maybeFromMap(
+                                        rowNowPlayingResponse.jsonBody)
+                                    ?.results
+                                    .toList() ??
                                 [];
+
                             return SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -237,10 +215,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             'MovieDetails',
                                             queryParameters: {
                                               'movieID': serializeParam(
-                                                NowPlayingCall.movieID(
-                                                  rowNowPlayingResponse
-                                                      .jsonBody,
-                                                )?[nowPlayingMovieIndex],
+                                                nowPlayingMovieItem.id,
                                                 ParamType.int,
                                               ),
                                             }.withoutNulls,
@@ -248,17 +223,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         },
                                         child: Hero(
                                           tag: valueOrDefault<String>(
-                                            getJsonField(
-                                                      nowPlayingMovieItem,
-                                                      r'''$.poster_path''',
-                                                    ) !=
-                                                    null
-                                                ? 'https://image.tmdb.org/t/p/original${getJsonField(
-                                                    nowPlayingMovieItem,
-                                                    r'''$.poster_path''',
-                                                  ).toString()}'
-                                                : 'https://media.comicbook.com/files/img/default-movie.png',
-                                            'https://media.comicbook.com/files/img/default-movie.png' '$nowPlayingMovieIndex',
+                                            'https://image.tmdb.org/t/p/original${nowPlayingMovieItem.posterPath}',
+                                            'https://picsum.photos/seed/293/600' '$nowPlayingMovieIndex',
                                           ),
                                           transitionOnUserGestures: true,
                                           child: ClipRRect(
@@ -266,17 +232,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 BorderRadius.circular(8.0),
                                             child: Image.network(
                                               valueOrDefault<String>(
-                                                getJsonField(
-                                                          nowPlayingMovieItem,
-                                                          r'''$.poster_path''',
-                                                        ) !=
-                                                        null
-                                                    ? 'https://image.tmdb.org/t/p/original${getJsonField(
-                                                        nowPlayingMovieItem,
-                                                        r'''$.poster_path''',
-                                                      ).toString()}'
-                                                    : 'https://media.comicbook.com/files/img/default-movie.png',
-                                                'https://media.comicbook.com/files/img/default-movie.png',
+                                                'https://image.tmdb.org/t/p/original${nowPlayingMovieItem.posterPath}',
+                                                'https://picsum.photos/seed/293/600',
                                               ),
                                               width: MediaQuery.sizeOf(context)
                                                       .width *
@@ -307,21 +264,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Upcoming Movies',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Readex Pro',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Upcoming Movies',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Outfit',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
                         ),
-                      ]
-                          .addToStart(const SizedBox(width: 16.0))
-                          .addToEnd(const SizedBox(width: 16.0)),
+                      ],
                     ),
                     FutureBuilder<ApiCallResponse>(
                       future: UpcomingMoviesCall.call(
@@ -333,14 +292,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           return const PostersLoadingWidget();
                         }
                         final rowUpcomingMoviesResponse = snapshot.data!;
+
                         return Builder(
                           builder: (context) {
-                            final upcomingMovie = (UpcomingMoviesCall.results(
-                                      rowUpcomingMoviesResponse.jsonBody,
-                                    )?.toList() ??
+                            final upcomingMovie = (HomeFeedStruct.maybeFromMap(
+                                            rowUpcomingMoviesResponse.jsonBody)
+                                        ?.results
+                                        .toList() ??
                                     [])
                                 .take(10)
                                 .toList();
+
                             return SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -362,10 +324,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             'MovieDetails',
                                             queryParameters: {
                                               'movieID': serializeParam(
-                                                UpcomingMoviesCall.id(
-                                                  rowUpcomingMoviesResponse
-                                                      .jsonBody,
-                                                )?[upcomingMovieIndex],
+                                                upcomingMovieItem.id,
                                                 ParamType.int,
                                               ),
                                             }.withoutNulls,
@@ -376,17 +335,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                               BorderRadius.circular(8.0),
                                           child: Image.network(
                                             valueOrDefault<String>(
-                                              getJsonField(
-                                                        upcomingMovieItem,
-                                                        r'''$.poster_path''',
-                                                      ) !=
-                                                      null
-                                                  ? 'https://image.tmdb.org/t/p/original${getJsonField(
-                                                      upcomingMovieItem,
-                                                      r'''$.poster_path''',
-                                                    ).toString()}'
-                                                  : 'https://media.comicbook.com/files/img/default-movie.png',
-                                              'https://media.comicbook.com/files/img/default-movie.png',
+                                              'https://image.tmdb.org/t/p/original${upcomingMovieItem.posterPath}',
+                                              'https://picsum.photos/seed/293/600',
                                             ),
                                             width: MediaQuery.sizeOf(context)
                                                     .width *
@@ -416,21 +366,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Top Rated',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Readex Pro',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Top Rated',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Outfit',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
                         ),
-                      ]
-                          .addToStart(const SizedBox(width: 16.0))
-                          .addToEnd(const SizedBox(width: 16.0)),
+                      ],
                     ),
                     FutureBuilder<ApiCallResponse>(
                       future: TopRatedCall.call(
@@ -442,14 +394,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           return const PostersLoadingWidget();
                         }
                         final rowTopRatedResponse = snapshot.data!;
+
                         return Builder(
                           builder: (context) {
-                            final topRatedMovie = (TopRatedCall.results(
-                                      rowTopRatedResponse.jsonBody,
-                                    )?.toList() ??
+                            final topRatedMovie = (HomeFeedStruct.maybeFromMap(
+                                            rowTopRatedResponse.jsonBody)
+                                        ?.results
+                                        .toList() ??
                                     [])
                                 .take(10)
                                 .toList();
+
                             return SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -471,9 +426,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             'MovieDetails',
                                             queryParameters: {
                                               'movieID': serializeParam(
-                                                TopRatedCall.id(
-                                                  rowTopRatedResponse.jsonBody,
-                                                )?[topRatedMovieIndex],
+                                                topRatedMovieItem.id,
                                                 ParamType.int,
                                               ),
                                             }.withoutNulls,
@@ -484,17 +437,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                               BorderRadius.circular(8.0),
                                           child: Image.network(
                                             valueOrDefault<String>(
-                                              getJsonField(
-                                                        topRatedMovieItem,
-                                                        r'''$.poster_path''',
-                                                      ) !=
-                                                      null
-                                                  ? 'https://image.tmdb.org/t/p/original${getJsonField(
-                                                      topRatedMovieItem,
-                                                      r'''$.poster_path''',
-                                                    ).toString()}'
-                                                  : 'https://media.comicbook.com/files/img/default-movie.png',
-                                              'https://media.comicbook.com/files/img/default-movie.png',
+                                              'https://image.tmdb.org/t/p/original${topRatedMovieItem.posterPath}',
+                                              'https://picsum.photos/seed/293/600',
                                             ),
                                             width: MediaQuery.sizeOf(context)
                                                     .width *
@@ -518,10 +462,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                   ].divide(const SizedBox(height: 8.0)),
                 ),
-              ]
-                  .divide(const SizedBox(height: 32.0))
-                  .addToStart(const SizedBox(height: 16.0))
-                  .addToEnd(const SizedBox(height: 16.0)),
+              ].divide(const SizedBox(height: 16.0)).addToEnd(const SizedBox(height: 16.0)),
             ),
           ),
         ),

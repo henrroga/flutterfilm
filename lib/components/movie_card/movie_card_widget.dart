@@ -52,181 +52,132 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
 
     return Container(
       width: MediaQuery.sizeOf(context).width * 1.0,
-      height: 100.0,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryBackground,
+        color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: FlutterFlowTheme.of(context).alternate,
+        ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
-              child: Row(
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(0.0),
-                          child: Image.network(
-                            widget.poster!,
-                            width: 75.0,
-                            height: 100.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      valueOrDefault<String>(
+                        widget.poster,
+                        'https://picsum.photos/seed/555/600',
                       ),
-                    ],
+                      width: 100.0,
+                      height: 120.0,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  Expanded(
-                    child: Column(
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                valueOrDefault<String>(
-                                  widget.name,
-                                  '[name]',
-                                ).maybeHandleOverflow(
-                                  maxChars: 50,
-                                  replacement: '…',
-                                ),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.name} (${widget.year})',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Readex Pro',
-                                      fontSize: 17.0,
+                                      fontFamily: 'Outfit',
+                                      fontSize: 16.0,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                     ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              valueOrDefault<String>(
-                                widget.year,
-                                '[year]',
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 12.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ].divide(const SizedBox(height: 4.0)),
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Builder(
-                            builder: (context) {
-                              if (FFAppState().watchlist.contains(widget.id)) {
-                                return FlutterFlowIconButton(
-                                  borderRadius: 20.0,
-                                  buttonSize: 48.0,
-                                  icon: Icon(
-                                    Icons.bookmark,
-                                    color:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    size: 30.0,
-                                  ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      FFAppState()
-                                          .removeFromWatchlist(widget.id!);
-                                    });
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'This movie is removed from your watchlist',
-                                          style: TextStyle(
-                                            color: FlutterFlowTheme.of(context)
-                                                .info,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16.0,
-                                          ),
-                                        ),
-                                        duration: const Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .tertiary,
-                                      ),
-                                    );
-                                  },
-                                );
-                              } else {
-                                return FlutterFlowIconButton(
-                                  borderRadius: 20.0,
-                                  buttonSize: 48.0,
-                                  icon: Icon(
-                                    Icons.bookmark_border,
-                                    color:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    size: 30.0,
-                                  ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      FFAppState().addToWatchlist(widget.id!);
-                                    });
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'This movie is added to your watchlist',
-                                          style: TextStyle(
-                                            color: FlutterFlowTheme.of(context)
-                                                .info,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16.0,
-                                          ),
-                                        ),
-                                        duration: const Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondary,
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ].divide(const SizedBox(width: 16.0)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          const Divider(
-            height: 1.0,
-            thickness: 1.0,
-            color: Color(0x747F8388),
+              Builder(
+                builder: (context) {
+                  if (FFAppState().watchlist.contains(widget.id)) {
+                    return FlutterFlowIconButton(
+                      borderRadius: 20.0,
+                      buttonSize: 48.0,
+                      icon: Icon(
+                        Icons.bookmark,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        FFAppState().removeFromWatchlist(widget.id!);
+                        safeSetState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'This movie is removed from your watchlist',
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).info,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            duration: const Duration(milliseconds: 4000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).tertiary,
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return FlutterFlowIconButton(
+                      borderRadius: 20.0,
+                      buttonSize: 48.0,
+                      icon: Icon(
+                        Icons.bookmark_border,
+                        color: FlutterFlowTheme.of(context).secondary,
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        FFAppState().addToWatchlist(widget.id!);
+                        safeSetState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'This movie is added to your watchlist',
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).info,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            duration: const Duration(milliseconds: 4000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).secondary,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ].divide(const SizedBox(width: 16.0)),
           ),
         ],
       ),

@@ -32,41 +32,43 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'Profile',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondary,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
           centerTitle: false,
-          elevation: 2.0,
+          elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
-          child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Column(
@@ -88,6 +90,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           Column(
                             mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -97,8 +100,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          fontFamily: 'Outfit',
+                                          fontSize: 16.0,
                                           letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                   ),
                                 ],
@@ -111,7 +116,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          fontFamily: 'Outfit',
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
                                           letterSpacing: 0.0,
                                         ),
                                   ),
@@ -121,70 +128,42 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                         ].divide(const SizedBox(width: 16.0)),
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 0.0, 0.0),
+                              child: Text(
                                 'Favorites',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Readex Pro',
+                                      fontFamily: 'Outfit',
                                       letterSpacing: 0.0,
                                     ),
                               ),
-                            ],
-                          ),
-                          ListView(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            children: const [],
-                          ),
-                        ],
-                      ),
-                    ].divide(const SizedBox(height: 16.0)),
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Dark Mode',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Outfit',
-                            fontSize: 16.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                          ),
+                            ),
+                          ],
+                        ),
+                        ListView(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          children: const [],
+                        ),
+                      ],
                     ),
-                    Switch.adaptive(
-                      value: _model.switchValue ??=
-                          Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (newValue) async {
-                        setState(() => _model.switchValue = newValue);
-                        if (newValue) {
-                          setDarkModeSetting(context, ThemeMode.dark);
-                        } else {
-                          setDarkModeSetting(context, ThemeMode.light);
-                        }
-                      },
-                      activeColor: FlutterFlowTheme.of(context).secondary,
-                      activeTrackColor: FlutterFlowTheme.of(context).accent1,
-                      inactiveTrackColor: FlutterFlowTheme.of(context).accent2,
-                      inactiveThumbColor:
-                          FlutterFlowTheme.of(context).secondaryText,
-                    ),
-                  ],
+                  ].divide(const SizedBox(height: 16.0)),
                 ),
-              ]
-                  .addToStart(const SizedBox(height: 16.0))
-                  .addToEnd(const SizedBox(height: 16.0)),
-            ),
+              ),
+            ]
+                .addToStart(const SizedBox(height: 16.0))
+                .addToEnd(const SizedBox(height: 16.0)),
           ),
         ),
       ),

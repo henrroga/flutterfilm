@@ -1,6 +1,5 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'genre_model.dart';
 export 'genre_model.dart';
@@ -43,28 +42,26 @@ class _GenreWidgetState extends State<GenreWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).tertiary,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: FlutterFlowTheme.of(context).secondary,
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AutoSizeText(
+            Text(
               valueOrDefault<String>(
                 widget.name,
-                'name',
+                '[name]',
               ),
-              textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Readex Pro',
-                    color: FlutterFlowTheme.of(context).info,
-                    letterSpacing: 0.3,
-                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Outfit',
+                    color: FlutterFlowTheme.of(context).secondary,
+                    letterSpacing: 0.0,
                   ),
-              minFontSize: 12.0,
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import '/components/movie_card/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/skeletons/watchlist_loading/watchlist_loading_widget.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,27 +41,28 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'Watchlist',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondary,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                 ),
           ),
           actions: const [],
           centerTitle: false,
-          elevation: 2.0,
+          elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
@@ -74,77 +76,75 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
                     if (id.isEmpty) {
                       return const EmptyListWidget();
                     }
-                    return ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(
-                        0,
-                        8.0,
-                        0,
-                        0,
-                      ),
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
                       scrollDirection: Axis.vertical,
                       itemCount: id.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16.0),
                       itemBuilder: (context, idIndex) {
                         final idItem = id[idIndex];
-                        return FutureBuilder<ApiCallResponse>(
-                          future: MovieDetailsCall.call(
-                            movieId: idItem,
-                          ),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return const WatchlistLoadingWidget();
-                            }
-                            final movieCardMovieDetailsResponse =
-                                snapshot.data!;
-                            return InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                context.pushNamed(
-                                  'MovieDetails',
-                                  queryParameters: {
-                                    'movieID': serializeParam(
-                                      getJsonField(
-                                        movieCardMovieDetailsResponse.jsonBody,
-                                        r'''$.id''',
-                                      ),
-                                      ParamType.int,
-                                    ),
-                                  }.withoutNulls,
-                                );
-                              },
-                              child: MovieCardWidget(
-                                key: Key('Keyr2n_${idIndex}_of_${id.length}'),
-                                name: MovieDetailsCall.title(
-                                  movieCardMovieDetailsResponse.jsonBody,
-                                )!,
-                                poster: valueOrDefault<String>(
-                                  MovieDetailsCall.poster(
-                                                movieCardMovieDetailsResponse
-                                                    .jsonBody,
-                                              ) !=
-                                              null &&
-                                          MovieDetailsCall.poster(
-                                                movieCardMovieDetailsResponse
-                                                    .jsonBody,
-                                              ) !=
-                                              ''
-                                      ? 'https://image.tmdb.org/t/p/original${MovieDetailsCall.poster(
+                        return Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 16.0, 0.0),
+                          child: FutureBuilder<ApiCallResponse>(
+                            future: MovieDetailsCall.call(
+                              movieId: idItem,
+                            ),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return const WatchlistLoadingWidget();
+                              }
+                              final movieCardMovieDetailsResponse =
+                                  snapshot.data!;
+
+                              return InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  context.pushNamed(
+                                    'MovieDetails',
+                                    queryParameters: {
+                                      'movieID': serializeParam(
+                                        getJsonField(
                                           movieCardMovieDetailsResponse
                                               .jsonBody,
-                                        )}'
-                                      : 'https://media.comicbook.com/files/img/default-movie.png',
-                                  'https://media.comicbook.com/files/img/default-movie.png',
+                                          r'''$.id''',
+                                        ),
+                                        ParamType.int,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                },
+                                child: MovieCardWidget(
+                                  key: Key('Keyr2n_${idIndex}_of_${id.length}'),
+                                  name: MovieStruct.maybeFromMap(
+                                          movieCardMovieDetailsResponse
+                                              .jsonBody)!
+                                      .title,
+                                  poster: valueOrDefault<String>(
+                                    MovieStruct.maybeFromMap(
+                                                    movieCardMovieDetailsResponse
+                                                        .jsonBody)
+                                                ?.posterPath !=
+                                            'null'
+                                        ? 'https://image.tmdb.org/t/p/original${MovieStruct.maybeFromMap(movieCardMovieDetailsResponse.jsonBody)?.posterPath}'
+                                        : 'https://blocks.astratic.com/img/general-img-portrait.png',
+                                    'https://blocks.astratic.com/img/general-img-portrait.png',
+                                  ),
+                                  id: idItem,
+                                  year: functions.getYear(
+                                      MovieStruct.maybeFromMap(
+                                              movieCardMovieDetailsResponse
+                                                  .jsonBody)!
+                                          .releaseDate),
                                 ),
-                                id: idItem,
-                                year: functions.getYear(MovieDetailsCall.date(
-                                  movieCardMovieDetailsResponse.jsonBody,
-                                )!),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         );
                       },
                     );

@@ -1,4 +1,5 @@
 
 abstract class FFAppConstants {
-  static const String tmdbKey = '[your_tmdb_api_key]';
+  static const String tmdbKey =
+      'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDhhNWZhN2FiNjA3Nzg2MTE5NTgzMmY3YmNlNzdkMSIsIm5iZiI6MTY5OTk1MTI1My43NTcsInN1YiI6IjY1NTMzMjk1OTAzYzUyMDBjNDExZTVjZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8cJGuLWYNjVAV6uXhEmcRzsa-CVqMyQwBsejqNc3JG4';
 }
