@@ -78,10 +78,10 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
                     }
 
                     return ListView.separated(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
                       scrollDirection: Axis.vertical,
                       itemCount: id.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+                      separatorBuilder: (_, __) => const SizedBox(height: 12.0),
                       itemBuilder: (context, idIndex) {
                         final idItem = id[idIndex];
                         return Padding(

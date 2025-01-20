@@ -247,9 +247,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     ],
                                   );
                                 })
-                                    .divide(const SizedBox(width: 8.0))
-                                    .addToStart(const SizedBox(width: 16.0))
-                                    .addToEnd(const SizedBox(width: 16.0)),
+                                    .divide(const SizedBox(width: 12.0))
+                                    .around(const SizedBox(width: 12.0)),
                               ),
                             );
                           },
@@ -349,9 +348,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     ],
                                   );
                                 })
-                                    .divide(const SizedBox(width: 8.0))
-                                    .addToStart(const SizedBox(width: 16.0))
-                                    .addToEnd(const SizedBox(width: 16.0)),
+                                    .divide(const SizedBox(width: 12.0))
+                                    .around(const SizedBox(width: 12.0)),
                               ),
                             );
                           },
@@ -451,9 +449,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     ],
                                   );
                                 })
-                                    .divide(const SizedBox(width: 8.0))
-                                    .addToStart(const SizedBox(width: 16.0))
-                                    .addToEnd(const SizedBox(width: 16.0)),
+                                    .divide(const SizedBox(width: 12.0))
+                                    .around(const SizedBox(width: 12.0)),
                               ),
                             );
                           },
@@ -462,7 +459,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                   ].divide(const SizedBox(height: 8.0)),
                 ),
-              ].divide(const SizedBox(height: 16.0)).addToEnd(const SizedBox(height: 16.0)),
+              ].divide(const SizedBox(height: 12.0)).addToEnd(const SizedBox(height: 12.0)),
             ),
           ),
         ),
