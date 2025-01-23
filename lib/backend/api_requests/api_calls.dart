@@ -151,8 +151,8 @@ class PopularCall {
 class MovieSearchCall {
   static Future<ApiCallResponse> call({
     String? query = '',
-    int? page = 1,
     String? tmdbKey = '',
+    int? page,
   }) async {
     return ApiManager.instance.makeApiCall(
       callName: 'Movie Search',
@@ -163,6 +163,7 @@ class MovieSearchCall {
       },
       params: {
         'query': query,
+        'page': page,
       },
       returnBody: true,
       encodeBodyUtf8: false,

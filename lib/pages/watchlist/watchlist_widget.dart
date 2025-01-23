@@ -1,10 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/components/empty_list/empty_list_widget.dart';
 import '/components/movie_card/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/skeletons/watchlist_loading/watchlist_loading_widget.dart';
-import '/backend/schema/structs/index.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,24 +72,26 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
               Expanded(
                 child: Builder(
                   builder: (context) {
-                    final id = FFAppState().watchlist.toList();
-                    if (id.isEmpty) {
+                    final movieWatchlist = FFAppState().watchlist.toList();
+                    if (movieWatchlist.isEmpty) {
                       return const EmptyListWidget();
                     }
 
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       scrollDirection: Axis.vertical,
-                      itemCount: id.length,
+                      itemCount: movieWatchlist.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 12.0),
-                      itemBuilder: (context, idIndex) {
-                        final idItem = id[idIndex];
+                      itemBuilder: (context, movieWatchlistIndex) {
+                        final movieWatchlistItem =
+                            movieWatchlist[movieWatchlistIndex];
                         return Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 0.0, 16.0, 0.0),
                           child: FutureBuilder<ApiCallResponse>(
                             future: MovieDetailsCall.call(
-                              movieId: idItem,
+                              movieId: movieWatchlistItem,
+                              tmdbKey: FFAppConstants.tmdbKey,
                             ),
                             builder: (context, snapshot) {
                               // Customize what your widget looks like when it's loading.
@@ -109,38 +111,35 @@ class _WatchlistWidgetState extends State<WatchlistWidget> {
                                     'MovieDetails',
                                     queryParameters: {
                                       'movieID': serializeParam(
-                                        getJsonField(
-                                          movieCardMovieDetailsResponse
-                                              .jsonBody,
-                                          r'''$.id''',
-                                        ),
+                                        MovieStruct.maybeFromMap(
+                                                movieCardMovieDetailsResponse
+                                                    .jsonBody)
+                                            ?.id,
                                         ParamType.int,
                                       ),
                                     }.withoutNulls,
                                   );
                                 },
                                 child: MovieCardWidget(
-                                  key: Key('Keyr2n_${idIndex}_of_${id.length}'),
-                                  name: MovieStruct.maybeFromMap(
-                                          movieCardMovieDetailsResponse
-                                              .jsonBody)!
-                                      .title,
-                                  poster: valueOrDefault<String>(
-                                    MovieStruct.maybeFromMap(
-                                                    movieCardMovieDetailsResponse
-                                                        .jsonBody)
-                                                ?.posterPath !=
-                                            'null'
-                                        ? 'https://image.tmdb.org/t/p/original${MovieStruct.maybeFromMap(movieCardMovieDetailsResponse.jsonBody)?.posterPath}'
-                                        : 'https://blocks.astratic.com/img/general-img-portrait.png',
-                                    'https://blocks.astratic.com/img/general-img-portrait.png',
+                                  key: Key(
+                                      'Keyr2n_${movieWatchlistIndex}_of_${movieWatchlist.length}'),
+                                  movie: MovieResultStruct(
+                                    id: MovieStruct.maybeFromMap(
+                                            movieCardMovieDetailsResponse
+                                                .jsonBody)
+                                        ?.id,
+                                    title: MovieStruct.maybeFromMap(
+                                            movieCardMovieDetailsResponse
+                                                .jsonBody)
+                                        ?.title,
+                                    posterPath:
+                                        'https://image.tmdb.org/t/p/original${MovieStruct.maybeFromMap(movieCardMovieDetailsResponse.jsonBody)?.posterPath}',
+                                    releaseDate: functions.getYear(
+                                        MovieStruct.maybeFromMap(
+                                                movieCardMovieDetailsResponse
+                                                    .jsonBody)!
+                                            .releaseDate),
                                   ),
-                                  id: idItem,
-                                  year: functions.getYear(
-                                      MovieStruct.maybeFromMap(
-                                              movieCardMovieDetailsResponse
-                                                  .jsonBody)!
-                                          .releaseDate),
                                 ),
                               );
                             },

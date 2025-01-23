@@ -1,13 +1,13 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/schema/structs/index.dart';
 import '/components/empty_list/empty_list_widget.dart';
 import '/components/movie_card/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/skeletons/search_results_loading/search_results_loading_widget.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'search_model.dart';
 export 'search_model.dart';
 
@@ -83,16 +83,39 @@ class _SearchWidgetState extends State<SearchWidget> {
                           focusNode: _model.textFieldFocusNode,
                           onChanged: (_) => EasyDebounce.debounce(
                             '_model.textController',
-                            const Duration(milliseconds: 2000),
+                            const Duration(milliseconds: 0),
                             () async {
-                              _model.input = _model.textController.text;
+                              _model.search = await MovieSearchCall.call(
+                                query: _model.textController.text,
+                                tmdbKey: FFAppConstants.tmdbKey,
+                                page: 1,
+                              );
+
+                              if ((_model.search?.succeeded ?? true)) {
+                                safeSetState(() =>
+                                    _model.listViewPagingController?.refresh());
+                                await _model.waitForOnePageForListView();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'something wrong',
+                                      style: GoogleFonts.getFont(
+                                        'Outfit',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                      ),
+                                    ),
+                                    duration: const Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).secondary,
+                                  ),
+                                );
+                              }
+
                               safeSetState(() {});
                             },
                           ),
-                          onFieldSubmitted: (_) async {
-                            _model.input = _model.textController.text;
-                            safeSetState(() {});
-                          },
                           autofocus: false,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -158,115 +181,57 @@ class _SearchWidgetState extends State<SearchWidget> {
                 ),
               ),
               Expanded(
-                child: Builder(
-                  builder: (context) {
-                    if (_model.input != null && _model.input != '') {
-                      return FutureBuilder<ApiCallResponse>(
-                        future: MovieSearchCall.call(
-                          query: valueOrDefault<String>(
-                            _model.input,
-                            'any',
+                child: PagedListView<ApiPagingParams, dynamic>.separated(
+                  pagingController: _model.setListViewController(
+                    (nextPageMarker) => MovieSearchCall.call(
+                      query: _model.textController.text,
+                      page: nextPageMarker.nextPageNumber,
+                      tmdbKey: FFAppConstants.tmdbKey,
+                    ),
+                  ),
+                  padding: EdgeInsets.zero,
+                  reverse: false,
+                  scrollDirection: Axis.vertical,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+                  builderDelegate: PagedChildBuilderDelegate<dynamic>(
+                    // Customize what your widget looks like when it's loading the first page.
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const SearchResultsLoadingWidget(),
+                    // Customize what your widget looks like when it's loading another page.
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const SearchResultsLoadingWidget(),
+                    noItemsFoundIndicatorBuilder: (_) => const EmptyListWidget(),
+                    itemBuilder: (context, _, resultIndex) {
+                      final resultItem = _model
+                          .listViewPagingController!.itemList![resultIndex];
+                      return Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(
+                              'MovieDetails',
+                              queryParameters: {
+                                'movieID': serializeParam(
+                                  resultItem.id,
+                                  ParamType.int,
+                                ),
+                              }.withoutNulls,
+                            );
+                          },
+                          child: MovieCardWidget(
+                            key: Key(
+                                'Key3wh_${resultIndex}_of_${_model.listViewPagingController!.itemList!.length}'),
+                            movie: resultItem,
                           ),
                         ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return const SearchResultsLoadingWidget();
-                          }
-                          final listViewMovieSearchResponse = snapshot.data!;
-
-                          return Builder(
-                            builder: (context) {
-                              final result = MovieExploreStruct.maybeFromMap(
-                                          listViewMovieSearchResponse.jsonBody)
-                                      ?.results
-                                      .toList() ??
-                                  [];
-                              if (result.isEmpty) {
-                                return const EmptyListWidget();
-                              }
-
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                scrollDirection: Axis.vertical,
-                                itemCount: result.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(height: 8.0),
-                                itemBuilder: (context, resultIndex) {
-                                  final resultItem = result[resultIndex];
-                                  return Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 0.0, 16.0, 0.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          'MovieDetails',
-                                          queryParameters: {
-                                            'movieID': serializeParam(
-                                              resultItem.id,
-                                              ParamType.int,
-                                            ),
-                                          }.withoutNulls,
-                                        );
-                                      },
-                                      child: MovieCardWidget(
-                                        key: Key(
-                                            'Keyyqc_${resultIndex}_of_${result.length}'),
-                                        name: valueOrDefault<String>(
-                                          resultItem.title,
-                                          '[title]',
-                                        ),
-                                        poster: valueOrDefault<String>(
-                                          resultItem.posterPath != 'null'
-                                              ? 'https://image.tmdb.org/t/p/original${resultItem.posterPath}'
-                                              : 'https://blocks.astratic.com/img/general-img-portrait.png',
-                                          'https://blocks.astratic.com/img/general-img-portrait.png',
-                                        ),
-                                        id: resultItem.id.toString(),
-                                        year: functions
-                                            .getYear(resultItem.releaseDate),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
                       );
-                    } else {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Search for any movie above',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        fontSize: 22.0,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
+                    },
+                  ),
                 ),
               ),
             ].divide(const SizedBox(height: 8.0)).addToStart(const SizedBox(height: 8.0)),

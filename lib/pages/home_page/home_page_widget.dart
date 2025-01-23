@@ -43,9 +43,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'FlutterFilm',
@@ -83,7 +83,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                         return Builder(
                           builder: (context) {
-                            final popularPoster = (HomeFeedStruct.maybeFromMap(
+                            final popularPoster = (ResultStruct.maybeFromMap(
                                             carouselPopularResponse.jsonBody)
                                         ?.results
                                         .toList() ??
@@ -188,7 +188,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                         return Builder(
                           builder: (context) {
-                            final nowPlayingMovie = HomeFeedStruct.maybeFromMap(
+                            final nowPlayingMovie = ResultStruct.maybeFromMap(
                                         rowNowPlayingResponse.jsonBody)
                                     ?.results
                                     .toList() ??
@@ -294,7 +294,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                         return Builder(
                           builder: (context) {
-                            final upcomingMovie = (HomeFeedStruct.maybeFromMap(
+                            final upcomingMovie = (ResultStruct.maybeFromMap(
                                             rowUpcomingMoviesResponse.jsonBody)
                                         ?.results
                                         .toList() ??
@@ -395,7 +395,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                         return Builder(
                           builder: (context) {
-                            final topRatedMovie = (HomeFeedStruct.maybeFromMap(
+                            final topRatedMovie = (ResultStruct.maybeFromMap(
                                             rowTopRatedResponse.jsonBody)
                                         ?.results
                                         .toList() ??

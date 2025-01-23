@@ -1,6 +1,8 @@
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'movie_card_model.dart';
@@ -9,16 +11,10 @@ export 'movie_card_model.dart';
 class MovieCardWidget extends StatefulWidget {
   const MovieCardWidget({
     super.key,
-    required this.name,
-    required this.poster,
-    required this.id,
-    required this.year,
+    required this.movie,
   });
 
-  final String? name;
-  final String? poster;
-  final String? id;
-  final String? year;
+  final MovieResultStruct? movie;
 
   @override
   State<MovieCardWidget> createState() => _MovieCardWidgetState();
@@ -72,8 +68,10 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
                       valueOrDefault<String>(
-                        widget.poster,
-                        'https://picsum.photos/seed/555/600',
+                        widget.movie?.posterPath != 'null'
+                            ? 'https://image.tmdb.org/t/p/original${widget.movie?.posterPath}'
+                            : 'https://blocks.astratic.com/img/general-img-portrait.png',
+                        'https://blocks.astratic.com/img/general-img-portrait.png',
                       ),
                       width: 100.0,
                       height: 120.0,
@@ -96,7 +94,10 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${widget.name} (${widget.year})',
+                                '${valueOrDefault<String>(
+                                  widget.movie?.title,
+                                  '[title]',
+                                )} (${functions.getYear(widget.movie!.releaseDate)})',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -116,7 +117,9 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
               ),
               Builder(
                 builder: (context) {
-                  if (FFAppState().watchlist.contains(widget.id)) {
+                  if (FFAppState()
+                      .watchlist
+                      .contains(widget.movie?.id.toString())) {
                     return FlutterFlowIconButton(
                       borderRadius: 20.0,
                       buttonSize: 48.0,
@@ -126,7 +129,8 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                         size: 30.0,
                       ),
                       onPressed: () async {
-                        FFAppState().removeFromWatchlist(widget.id!);
+                        FFAppState()
+                            .removeFromWatchlist(widget.movie!.id.toString());
                         safeSetState(() {});
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -155,7 +159,8 @@ class _MovieCardWidgetState extends State<MovieCardWidget> {
                         size: 30.0,
                       ),
                       onPressed: () async {
-                        FFAppState().addToWatchlist(widget.id!);
+                        FFAppState()
+                            .addToWatchlist(widget.movie!.id.toString());
                         safeSetState(() {});
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

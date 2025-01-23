@@ -5,8 +5,8 @@ import '/backend/schema/util/schema_util.dart';
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-class MovieHomeFeedStruct extends BaseStruct {
-  MovieHomeFeedStruct({
+class MovieResultStruct extends BaseStruct {
+  MovieResultStruct({
     int? id,
     String? title,
     String? posterPath,
@@ -55,8 +55,8 @@ class MovieHomeFeedStruct extends BaseStruct {
 
   bool hasReleaseDate() => _releaseDate != null;
 
-  static MovieHomeFeedStruct fromMap(Map<String, dynamic> data) =>
-      MovieHomeFeedStruct(
+  static MovieResultStruct fromMap(Map<String, dynamic> data) =>
+      MovieResultStruct(
         id: castToType<int>(data['id']),
         title: data['title'] as String?,
         posterPath: data['poster_path'] as String?,
@@ -64,8 +64,8 @@ class MovieHomeFeedStruct extends BaseStruct {
         releaseDate: data['release_date'] as String?,
       );
 
-  static MovieHomeFeedStruct? maybeFromMap(dynamic data) => data is Map
-      ? MovieHomeFeedStruct.fromMap(data.cast<String, dynamic>())
+  static MovieResultStruct? maybeFromMap(dynamic data) => data is Map
+      ? MovieResultStruct.fromMap(data.cast<String, dynamic>())
       : null;
 
   Map<String, dynamic> toMap() => {
@@ -100,8 +100,8 @@ class MovieHomeFeedStruct extends BaseStruct {
         ),
       }.withoutNulls;
 
-  static MovieHomeFeedStruct fromSerializableMap(Map<String, dynamic> data) =>
-      MovieHomeFeedStruct(
+  static MovieResultStruct fromSerializableMap(Map<String, dynamic> data) =>
+      MovieResultStruct(
         id: deserializeParam(
           data['id'],
           ParamType.int,
@@ -130,11 +130,11 @@ class MovieHomeFeedStruct extends BaseStruct {
       );
 
   @override
-  String toString() => 'MovieHomeFeedStruct(${toMap()})';
+  String toString() => 'MovieResultStruct(${toMap()})';
 
   @override
   bool operator ==(Object other) {
-    return other is MovieHomeFeedStruct &&
+    return other is MovieResultStruct &&
         id == other.id &&
         title == other.title &&
         posterPath == other.posterPath &&
@@ -147,14 +147,14 @@ class MovieHomeFeedStruct extends BaseStruct {
       .hash([id, title, posterPath, backdropPath, releaseDate]);
 }
 
-MovieHomeFeedStruct createMovieHomeFeedStruct({
+MovieResultStruct createMovieResultStruct({
   int? id,
   String? title,
   String? posterPath,
   String? backdropPath,
   String? releaseDate,
 }) =>
-    MovieHomeFeedStruct(
+    MovieResultStruct(
       id: id,
       title: title,
       posterPath: posterPath,
